@@ -6,9 +6,12 @@ const Hero = () => {
   const [showSurvey, setShowSurvey] = useState(false); // To toggle survey visibility
   const [email, setEmail] = useState(""); // Email input state
   const [emailSubmitted, setEmailSubmitted] = useState(false); // To track email submission status
+  const [emailEntered, setEmailEntered] = useState(false); // To track if email has been entered
+  const [hideText, setHideText] = useState(false); // To hide the introductory text after button click
 
   const handleYesClick = () => {
     setShowSurvey(true); // Show survey when "Yes" is clicked
+    setHideText(true); // Hide the text after clicking the button
   };
 
   const handleEmailChange = (e) => {
@@ -19,6 +22,7 @@ const Hero = () => {
     e.preventDefault();
     if (email) {
       // Simulate email submission success
+      setEmailEntered(true); // Set email entered state to true
       setEmailSubmitted(true); // Set submission state to true
     } else {
       alert("Please enter a valid email."); // Alert if the email is empty
@@ -27,7 +31,7 @@ const Hero = () => {
 
   return (
     <div
-      className="min-h-screen bg-black text-white relative"
+      className="min-h-screen bg-black text-white relative mb-10"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
@@ -45,17 +49,23 @@ const Hero = () => {
             <p className="text-lg md:text-2xl bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] bg-clip-text text-transparent font-semibold">
               We’ve got a surprise for you!
             </p>
-            <p className="text-sm font-bold mb-2 text-[#C5C5C5] font-lexend-light ">
-              Submit the survey and the gift is yours.
-              <br/>
-              We bet you didn’t see this coming.
-            </p>
-            
+
+            {/* Conditional Text */}
+            {!hideText && !emailEntered && !emailSubmitted && (
+              <>
+                <p className="text-sm font-bold mb-2 text-[#C5C5C5] font-lexend-light">
+                  Submit the survey and the gift is yours.
+                  <br />
+                  We bet you didn’t see this coming.
+                </p>
+              </>
+            )}
+
             {/* Conditional Rendering */}
             {!showSurvey ? (
               <>
                 {/* Survey Button */}
-                {!emailSubmitted && (
+                {!emailEntered && !emailSubmitted && (
                   <button
                     onClick={handleYesClick}
                     className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-6 py-2 rounded-full font-bold text-xs md:text-sm shadow-lg"
@@ -65,22 +75,26 @@ const Hero = () => {
                 )}
 
                 {/* Email Form */}
-                {!emailSubmitted && (
-                  <form className="flex items-center gap-2 mt-4" onSubmit={handleSubmitEmail}>
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      required
-                      value={email}
-                      onChange={handleEmailChange}
-                      className="px-3 py-1 rounded-l-full text-white font-bold w-32 md:w-40 h-16 bg-transparent border-2 border-[#E0B865] placeholder-white text-xs"
-                    />
-                    <button
-                      type="submit"
-                      className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-3 py-1 rounded-r-full font-bold text-xs"
-                    >
-                      Submit
-                    </button>
+                {!emailSubmitted && !emailEntered && (
+                  <form className="flex flex-col gap-2 pt-10" onSubmit={handleSubmitEmail}>
+                    <p className="text-xs md:text-sm font-bold text-[#C5C5C5] pl-2">
+                      Nah, I’ll just sign-up for now..
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        className="px-3 py-3 rounded-l-full text-white font-bold w-32 md:w-40 bg-black border-2 border-[#E0B865] placeholder-white text-xs focus:outline-none"
+                      />
+                      <button
+                        onClick={handleSubmitEmail}
+                        className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-4 py-3 rounded-r-full font-bold text-xs"
+                      >
+                        Submit
+                      </button>
+                    </div>
                   </form>
                 )}
 
@@ -102,3 +116,5 @@ const Hero = () => {
 };
 
 export default Hero;
+
+
