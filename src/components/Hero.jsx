@@ -31,14 +31,15 @@ const Hero = () => {
 
   return (
     <div
-      className="min-h-screen bg-black text-white relative mb-10"
-      style={{
-        backgroundImage: `url(${bgImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center bottom",
-      }}
-    >
-      <div className="container mx-auto px-4 pt-10 md:pt-16 lg:pt-20 pl-6 md:pl-12 lg:pl-16 relative">
+  className="min-h-screen bg-black text-white relative p-2"
+  style={{
+    backgroundImage: `url(${bgImage})`, // Use backgroundImage for URLs
+    backgroundSize: "cover",
+    backgroundPosition: "center bottom",
+  }}
+>
+      
+      <div className="container mx-auto px-4 pt-10 md:pt-16 lg:pt-20 pl-10 md:pl-12 lg:pl-16 relative">
         <div className="max-w-3xl">
           {/* Content Top-Left */}
           <div className="text-left space-y-4">
@@ -101,7 +102,7 @@ const Hero = () => {
                 {/* Success Message */}
                 {emailSubmitted && (
                   <div className="mt-4 text-lg font-bold text-[#E0B865]">
-                    Success! You have been added to our list. 🫡
+                   Thank you. We’ll keep you updated :)
                   </div>
                 )}
               </>

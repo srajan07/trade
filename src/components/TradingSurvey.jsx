@@ -16,16 +16,16 @@ const TradingSurvey = () => {
         { id: 5, question: "Do you exit trades early or hold onto losing trades beyond your stop loss due to fear?", type: "single", mandatory: true, options: [{ text: "Always", next: 6 }, { text: "Often", next: 6 }, { text: "Sometimes", next: 7 }, { text: "Rarely or Never", next: 7 }] },
         { id: 6, question: "Since you frequently exit trades due to fear - what triggers this behaviour?", type: "multiple", mandatory: true, options: ["Previous losses in similar trades", "Sudden market movements", "Lack of confidence", "Emotional stress during trading"] },
         { id: 7, question: "Since you rarely exit due to fear, how do you avoid holding losing trades?", type: "multiple", mandatory: true, options: ["I always stick to my plan.", "I use automated SL and exits.", "I practice mindfulness/meditation."] },
-        { id: 8, question: "Do you frequently change your strategy based on short-term market trends?", type: "single", mandatory: true, options: [{ text: "Always", next: 9 }, { text: "Often", next: 9 }, { text: "Sometimes", next: 10 }, { text: "Rarely or Never", next: 10 }] },
+        { id: 8, question: "Do you hold trades after hitting your daily profit target, expecting bigger gains?", type: "single", mandatory: true, options: [{ text: "Always", next: 9 }, { text: "Often", next: 9 }, { text: "Sometimes", next: 10 }, { text: "Rarely or Never", next: 10 }] },
         { id: 9, question: "What usually makes you hold the trade longer?", type: "multiple", mandatory: true, options: ["Recent success in trades", "Overconfidence in the trend", "FOMO (Fear of Missing Out)"] },
         { id: 10, question: "How do you control your emotion - Greed?", type: "multiple", mandatory: true, options: ["Pre-set targets with automated exits", "Logging out after hitting the target", "Trading with discipline", "Other (specify)"] },
-        { id: 11, question: "Do you avoid taking trades after consecutive losses due to hesitation?", type: "single", mandatory: true, options: [{ text: "Always", next: 12 }, { text: "Often", next: 12 }, { text: "Sometimes", next: 13 }, { text: "Rarely or Never", next: 13 }] },
+        { id: 11, question: "Do you increase position size after a loss to recover quickly, leading to overtrading?", type: "single", mandatory: true, options: [{ text: "Always", next: 12 }, { text: "Often", next: 12 }, { text: "Sometimes", next: 13 }, { text: "Rarely or Never", next: 13 }] },
         { id: 12, question: "What makes you revenge trade/over-trade?", type: "multiple", mandatory: true, options: ["I can't see losses.", "Desire to recover quickly.", "Pressure to meet monthly commitment.", "Other (specify)"] },
         { id: 13, question: "How do you resist your urge to overtrade?", type: "multiple", mandatory: true, options: ["Follow strict position sizing rules", "Take break after losses", "Set strict daily profit/loss limits", "Other (specify)"] },
-        { id: 14, question: "Do you take excessive risks in trades to compensate for previous losses?", type: "single", mandatory: true, options: [{ text: "Always", next: 15 }, { text: "Often", next: 15 }, { text: "Sometimes", next: 16 }, { text: "Rarely or Never", next: 16 }] },
+        { id: 14, question: "Does a losing first trade affect your mindset for the day?", type: "single", mandatory: true, options: [{ text: "Always (Mismanage the next 3+ trades on most losing days.)", next: 15 }, { text: "Often  (Feel affected for the next 2-3 trades on about half the losing days.)", next: 15 }, { text: "Sometimes (Feel affected for the next trade but recover quickly.)", next: 16 }, { text: "Rarely or Never  (Stay unaffected by early losses and trade consistently.)", next: 16 }] },
         { id: 15, question: "How do losses affect your trading mindset?", type: "multiple", mandatory: true, options: ["Feeling of frustration/anger.", "Reduce confidence in subsequent trades.", "Tendency to make impulsive trades.", "Other (specify)"] },
         { id: 16, question: "How do you maintain emotional stability after a loss?", type: "multiple", mandatory: true, options: ["Take a break.", "Review losing trade for lessons.", "Stick to plan always.", "Other (specify)"] },
-        { id: 17, question: "Do you review your trades regularly to identify mistakes and areas of improvement?", type: "single", mandatory: true, options: [{ text: "Always", next: 18 }, { text: "Often", next: 18 }, { text: "Sometimes", next: 19 }, { text: "Rarely or Never", next: 19 }] },
+        { id: 17, question: "If your psychological challenges were addressed through specific features, would you be willing to swift to a new broker?", type: "single", mandatory: true, options: [{ text: "Yes", next: 18 },  { text: "No", next: 19 } ] },
         { id: 18, question: "We love you! Any suggestions for us?", type: "text", mandatory: false },
         { id: 19, question: "Why not?", type: "single", mandatory: true, options: ["Lack of time", "Not interested", "Other priorities"] },
     ];
@@ -149,7 +149,7 @@ const TradingSurvey = () => {
                     <p className="mb-2 font-semibold flex items-center"> {/* Added flex for alignment */}
             {surveyQuestions[currentQuestionIndex].question}
             {surveyQuestions[currentQuestionIndex].mandatory && (
-              <span className="text-red-500 ml-1 text-xl">*</span> // Added asterisk for mandatory questions
+              <span className="text-[#E0B865] ml-1 text-xl">*</span> // Added asterisk for mandatory questions
             )}
           </p>
                     <div className="flex flex-col gap-2">
@@ -197,11 +197,11 @@ const TradingSurvey = () => {
                         <button
                             onClick={handlePrevious}
                             disabled={currentQuestionIndex === 0} // Disable on first question
-                            className="bg-gray-400 text-white px-4 py-2 rounded disabled:opacity-50" // Style and disable
+                            className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black rounded-full px-4 py-2 rounded disabled:opacity-50" // Style and disable
                         >
                             Previous
                         </button>
-                        <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded ml-2">
+                        <button onClick={handleNext} className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black rounded-full px-4 py-2 rounded ml-2">
                             Next
                         </button>
                     </div>
@@ -228,7 +228,7 @@ const TradingSurvey = () => {
 
                         </div>
                     ) : (
-                        <p>Thank you! Your responses have been recorded.</p>
+                        <p>Thanks for the survey. The gift will reach your email! 🫡.</p>
                     )}
                 </div>
             )}
