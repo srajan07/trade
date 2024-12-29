@@ -24,7 +24,7 @@ const Hero = () => {
     if (email) {
       try {
         // Send email to the backend API
-        const response = await fetch('http://localhost:5000/api/users/email', {
+        const response = await fetch('https://trade-app-backend-69ex.onrender.com/api/users/email', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

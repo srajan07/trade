@@ -151,7 +151,7 @@ const handleOptionSelect = (option) => {
     } else {
         // Survey completed, send responses to the backend
         try {
-            await axios.post('http://localhost:5000/api/users/save', {
+            await axios.post('https://trade-app-backend-69ex.onrender.com/api/users/save', {
                 answers: responses, // Send the responses to the backend
             });
 
@@ -173,7 +173,7 @@ const handleOptionSelect = (option) => {
         if (email) {
           try {
             // Send email to the backend API
-            const response = await fetch('http://localhost:5000/api/users/email', {
+            const response = await fetch('https://trade-app-backend-69ex.onrender.com/api/users/email', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
