@@ -110,11 +110,11 @@ const Hero = () => {
                         placeholder="Enter your email"
                         value={email}
                         onChange={handleEmailChange}
-                        className="px-3 py-3 rounded-l-full text-white font-bold w-32 md:w-40 bg-black border-2 border-[#E0B865] placeholder-white text-xs focus:outline-none"
+                        className="px-3 py-3 rounded-l-full text-white font-bold w-32 md:w-40  border-2 border-[#E0B865] placeholder-white text-xs focus:outline-none"
                       />
                       <button
                         onClick={handleSubmitEmail}
-                        className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-4 py-3 rounded-r-full font-bold text-xs"
+                        className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-3 py-3 rounded-r-full font-bold text-xs"
                       >
                         Submit
                       </button>
