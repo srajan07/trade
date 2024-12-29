@@ -110,7 +110,7 @@ const Hero = () => {
                         placeholder="Enter your email"
                         value={email}
                         onChange={handleEmailChange}
-                        className="px-3 py-3 rounded-l-full text-white font-bold w-32 md:w-44 bg-black border-2 border-[#E0B865] placeholder-white text-xs focus:outline-none"
+                        className="px-3 py-3 rounded-l-full text-white font-bold w-36 md:w-44 bg-black border-2 border-[#E0B865] placeholder-white text-xs focus:outline-none"
                       />
                       <button
                         onClick={handleSubmitEmail}
