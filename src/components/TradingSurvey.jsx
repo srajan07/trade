@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-
+import axios from 'axios';
 const TradingSurvey = () => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [responses, setResponses] = useState({});
+    // const [responses, setResponses] = useState({});
     const [surveyCompleted, setSurveyCompleted] = useState(false);
     const [email, setEmail] = useState("");
     const [emailSubmitted, setEmailSubmitted] = useState(false);
@@ -22,80 +22,184 @@ const TradingSurvey = () => {
         { id: 11, question: "Do you increase position size after a loss to recover quickly, leading to overtrading?", type: "single", mandatory: true, options: [{ text: "Always", next: 12 }, { text: "Often", next: 12 }, { text: "Sometimes", next: 13 }, { text: "Rarely or Never", next: 13 }] },
         { id: 12, question: "What makes you revenge trade/over-trade?", type: "multiple", mandatory: true, options: ["I can't see losses.", "Desire to recover quickly.", "Pressure to meet monthly commitment.", "Other (specify)"] },
         { id: 13, question: "How do you resist your urge to overtrade?", type: "multiple", mandatory: true, options: ["Follow strict position sizing rules", "Take break after losses", "Set strict daily profit/loss limits", "Other (specify)"] },
-        { id: 14, question: "Does a losing first trade affect your mindset for the day?", type: "single", mandatory: true, options: [{ text: "Always (Mismanage the next 3+ trades on most losing days.)", next: 15 }, { text: "Often  (Feel affected for the next 2-3 trades on about half the losing days.)", next: 15 }, { text: "Sometimes (Feel affected for the next trade but recover quickly.)", next: 16 }, { text: "Rarely or Never  (Stay unaffected by early losses and trade consistently.)", next: 16 }] },
+        { id: 14, question: "Does a losing first trade affect your mindset for the day?", type: "single", mandatory: true, options: [{ text: "Always ", next: 15 }, { text: "Often  ", next: 15 }, { text: "Sometimes ", next: 16 }, { text: "Rarely or Never ", next: 16 }] },
         { id: 15, question: "How do losses affect your trading mindset?", type: "multiple", mandatory: true, options: ["Feeling of frustration/anger.", "Reduce confidence in subsequent trades.", "Tendency to make impulsive trades.", "Other (specify)"] },
         { id: 16, question: "How do you maintain emotional stability after a loss?", type: "multiple", mandatory: true, options: ["Take a break.", "Review losing trade for lessons.", "Stick to plan always.", "Other (specify)"] },
         { id: 17, question: "If your psychological challenges were addressed through specific features, would you be willing to swift to a new broker?", type: "single", mandatory: true, options: [{ text: "Yes", next: 18 },  { text: "No", next: 19 } ] },
         { id: 18, question: "We love you! Any suggestions for us?", type: "text", mandatory: false },
         { id: 19, question: "Why not?", type: "single", mandatory: true, options: ["Lack of time", "Not interested", "Other priorities"] },
     ];
+    // Set initial state with empty responses for each question
+const [responses, setResponses] = useState(
+    surveyQuestions.reduce((acc, question) => {
+        acc[question.id] = ""; // Initialize with empty string for each question
+        return acc;
+    }, {})
+);
 
-    const handleOptionSelect = (option) => {
-        const currentQuestion = surveyQuestions[currentQuestionIndex];
-        const optionText = typeof option === "string" ? option : option.text;
+// Handle selecting an option for single-choice or multiple-choice questions
+const handleOptionSelect = (option) => {
+    const currentQuestion = surveyQuestions[currentQuestionIndex];
+    const optionText = typeof option === "string" ? option : option.text;
+
+    if (currentQuestion.type === "single") {
+        setResponses((prev) => ({ ...prev, [currentQuestion.id]: optionText }));
+    } else if (currentQuestion.type === "multiple") {
+        setResponses((prev) => {
+            const prevOptions = prev[currentQuestion.id] || [];
+            const isSelected = prevOptions.includes(optionText);
+            return { ...prev, [currentQuestion.id]: isSelected ? prevOptions.filter((opt) => opt !== optionText) : [...prevOptions, optionText] };
+        });
+    }
+};
+
+
+    // const handleOptionSelect = (option) => {
+    //     const currentQuestion = surveyQuestions[currentQuestionIndex];
+    //     const optionText = typeof option === "string" ? option : option.text;
 
         
-        if (currentQuestion.type === "single") {
-            setResponses((prev) => ({ ...prev, [currentQuestion.id]: optionText }));
-        } else if (currentQuestion.type === "multiple") {
-            setResponses((prev) => {
-                const prevOptions = prev[currentQuestion.id] || [];
-                const isSelected = prevOptions.includes(optionText);
-                return { ...prev, [currentQuestion.id]: isSelected ? prevOptions.filter((opt) => opt !== optionText) : [...prevOptions, optionText] };
+    //     if (currentQuestion.type === "single") {
+    //         setResponses((prev) => ({ ...prev, [currentQuestion.id]: optionText }));
+    //     } else if (currentQuestion.type === "multiple") {
+    //         setResponses((prev) => {
+    //             const prevOptions = prev[currentQuestion.id] || [];
+    //             const isSelected = prevOptions.includes(optionText);
+    //             return { ...prev, [currentQuestion.id]: isSelected ? prevOptions.filter((opt) => opt !== optionText) : [...prevOptions, optionText] };
+    //         });
+    //     }
+    // };
+
+    // const handleNext = () => {
+    //     const current = surveyQuestions[currentQuestionIndex];
+    //     const response = responses[current.id];
+
+    //     if (current.mandatory && !response) {
+    //         alert("Please select an option before proceeding.");
+    //         return;
+    //     }
+
+    //     if (current.type === "text" && !suggestion.trim() && current.mandatory) {
+    //         alert("Please provide your suggestion before proceeding.");
+    //         return;
+    //     }
+
+    //     if (current.type === "text" && suggestion.trim()) {
+    //         setResponses((prev) => ({ ...prev, [current.id]: suggestion }));
+    //         setSuggestion("");
+    //     }
+
+    //     const selectedOption = current.options?.find((opt) => (opt.text || opt) === response) || {};
+
+    //     let nextIndex;
+    //     if (selectedOption.next !== undefined) {
+    //         nextIndex = surveyQuestions.findIndex((q) => q.id === selectedOption.next);
+    //         if (nextIndex === -1) {
+    //             console.error(`Question with ID ${selectedOption.next} not found!`);
+    //             return;
+    //         }
+    //     } else {
+    //         nextIndex = currentQuestionIndex + 1;
+    //     }
+
+    //     if (nextIndex < surveyQuestions.length) {
+    //         setCurrentQuestionIndex(nextIndex);
+    //     } else {
+    //         setSurveyCompleted(true);
+    //     }
+    // };
+  // State to track if email is submitted
+
+
+  const handleNext = async () => {
+    const current = surveyQuestions[currentQuestionIndex];
+    const response = responses[current.id];
+
+    // Validation checks
+    if (current.mandatory && !response) {
+        alert("Please select an option before proceeding.");
+        return;
+    }
+
+    if (current.type === "text" && !suggestion.trim() && current.mandatory) {
+        alert("Please provide your suggestion before proceeding.");
+        return;
+    }
+
+    if (current.type === "text" && suggestion.trim()) {
+        setResponses((prev) => ({ ...prev, [current.id]: suggestion }));
+        setSuggestion("");
+    }
+
+    // Handling the next question based on selected options
+    const selectedOption = current.options?.find((opt) => (opt.text || opt) === response) || {};
+
+    let nextIndex;
+    if (selectedOption.next !== undefined) {
+        nextIndex = surveyQuestions.findIndex((q) => q.id === selectedOption.next);
+        if (nextIndex === -1) {
+            console.error(`Question with ID ${selectedOption.next} not found!`);
+            return;
+        }
+    } else {
+        nextIndex = currentQuestionIndex + 1;
+    }
+
+    // If there are more questions, show the next one
+    if (nextIndex < surveyQuestions.length) {
+        setCurrentQuestionIndex(nextIndex);
+    } else {
+        // Survey completed, send responses to the backend
+        try {
+            await axios.post('http://localhost:5000/api/users/save', {
+                answers: responses, // Send the responses to the backend
             });
-        }
-    };
 
-    const handleNext = () => {
-        const current = surveyQuestions[currentQuestionIndex];
-        const response = responses[current.id];
-
-        if (current.mandatory && !response) {
-            alert("Please select an option before proceeding.");
-            return;
-        }
-
-        if (current.type === "text" && !suggestion.trim() && current.mandatory) {
-            alert("Please provide your suggestion before proceeding.");
-            return;
-        }
-
-        if (current.type === "text" && suggestion.trim()) {
-            setResponses((prev) => ({ ...prev, [current.id]: suggestion }));
-            setSuggestion("");
-        }
-
-        const selectedOption = current.options?.find((opt) => (opt.text || opt) === response) || {};
-
-        let nextIndex;
-        if (selectedOption.next !== undefined) {
-            nextIndex = surveyQuestions.findIndex((q) => q.id === selectedOption.next);
-            if (nextIndex === -1) {
-                console.error(`Question with ID ${selectedOption.next} not found!`);
-                return;
-            }
-        } else {
-            nextIndex = currentQuestionIndex + 1;
-        }
-
-        if (nextIndex < surveyQuestions.length) {
-            setCurrentQuestionIndex(nextIndex);
-        } else {
             setSurveyCompleted(true);
+            alert("Survey submitted successfully!");
+        } catch (error) {
+            console.error("Error submitting survey:", error);
+            alert("Failed to submit survey. Please try again.");
         }
-    };
+    }
+};
 
+    
     const handleEmailChange = (e) => setEmail(e.target.value);
 
-    const handleSubmitEmail = () => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (emailRegex.test(email.trim())) {
-            setEmailSubmitted(true);
-            alert("Thank you for your email! We'll share insights with you soon.");
+    const handleSubmitEmail = async (e) => {
+        e.preventDefault();
+      
+        if (email) {
+          try {
+            // Send email to the backend API
+            const response = await fetch('http://localhost:5000/api/users/email', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email }), // Send email as JSON
+            });
+      
+            const data = await response.json();
+      
+            if (response.ok) {
+              // Successfully saved the email
+              setEmailEntered(true);
+              setEmailSubmitted(true);
+            } else {
+              // Handle errors
+              alert(data.message || "Error occurred while submitting the email");
+            }
+          } catch (error) {
+            alert("Failed to submit email, please try again.");
+            console.error(error);
+          }
         } else {
-            alert("Please provide a valid email address.");
+          alert("Please enter a valid email.");
         }
-    };
+      };
+      
     const getPreviousQuestionId = (questions, currentQuestionId, responses) => {
       for (let i = questions.length - 1; i >= 0; i--) {
           const question = questions[i];

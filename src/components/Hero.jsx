@@ -18,16 +18,39 @@ const Hero = () => {
     setEmail(e.target.value); // Update email value
   };
 
-  const handleSubmitEmail = (e) => {
+  const handleSubmitEmail = async (e) => {
     e.preventDefault();
+  
     if (email) {
-      // Simulate email submission success
-      setEmailEntered(true); // Set email entered state to true
-      setEmailSubmitted(true); // Set submission state to true
+      try {
+        // Send email to the backend API
+        const response = await fetch('http://localhost:5000/api/users/email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }), // Send email as JSON
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          // Successfully saved the email
+          setEmailEntered(true);
+          setEmailSubmitted(true);
+        } else {
+          // Handle errors
+          alert(data.message || "Error occurred while submitting the email");
+        }
+      } catch (error) {
+        alert("Failed to submit email, please try again.");
+        console.error(error);
+      }
     } else {
-      alert("Please enter a valid email."); // Alert if the email is empty
+      alert("Please enter a valid email.");
     }
   };
+  
 
   return (
     <div
