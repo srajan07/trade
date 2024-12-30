@@ -141,25 +141,62 @@
 // export default Hero;
 
 import React, { useState } from 'react';
-import './Hero.css';
+import './Hero.css'; // Make sure to create this CSS file
 
 const Hero = () => {
-  // ... (rest of your component code - state, handlers, etc.)
+  const [email, setEmail] = useState('');
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [submissionError, setSubmissionError] = useState(null); // To handle errors
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubmitEmail = async (e) => {
+    e.preventDefault();
+    setSubmissionError(null); // Clear previous errors
+
+    if (!email) {
+      setSubmissionError('Please enter an email.');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://trade-app-backend-69ex.onrender.com/api/users/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setSubmissionError(errorData.message || 'Error submitting email.');
+        return;
+      }
+
+      setEmailSubmitted(true);
+      setEmail(''); // Clear the input field after successful submission
+
+    } catch (error) {
+      setSubmissionError('Failed to submit email. Please try again.');
+      console.error(error);
+    }
+  };
 
   return (
     <div
       className="hero min-h-screen bg-black text-white relative p-4 font-lexend"
       style={{
-        backgroundImage: `url(../assets/bg.jpeg)`,
+        backgroundImage: `url(../assets/bg.jpeg)`, // Make sure this path is correct
         backgroundSize: 'cover',
         backgroundPosition: 'center bottom',
       }}
     >
       <div className="container mx-auto px-4 pt-16 md:pt-20 lg:pt-24">
         <div className="max-w-3xl mx-auto text-left space-y-6">
-          <h1 className="text-3xl md:text-4xl font-bold leading-tight">
-            Are you an Option Buyer?
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight">Are you an Option Buyer?</h1>
           <p className="text-base md:text-lg">We are one among you!</p>
           <p className="text-xl md:text-2xl font-semibold text-[#E0B865]">
             We’re building something BIG & UNIQUE <br />
@@ -167,18 +204,20 @@ const Hero = () => {
           </p>
           <p className="text-sm">Join us in the journey!</p>
 
+          {submissionError && <div className="text-red-500 text-sm">{submissionError}</div>} {/* Display error message */}
+
           {!emailSubmitted ? (
-            <form className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full" onSubmit={handleSubmitEmail}> {/* Key change: flex-col on small screens */}
+            <form className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full" onSubmit={handleSubmitEmail}>
               <input
                 type="email"
                 placeholder="Email"
                 value={email}
                 onChange={handleEmailChange}
-                className="px-4 py-2 rounded-full md:rounded-l-full bg-black border border-[#E0B865] text-white focus:outline-none w-full md:w-auto" // Key change: w-full on small screens
+                className="px-4 py-2 rounded-full md:rounded-l-full bg-black border border-[#E0B865] text-white focus:outline-none w-full md:w-auto"
               />
               <button
                 type="submit"
-                className="bg-[#E0B865] text-black px-4 py-2 rounded-full md:rounded-r-full font-bold hover:bg-[#c09855] transition-colors w-full md:w-auto" // Key change: w-full on small screens
+                className="bg-[#E0B865] text-black px-4 py-2 rounded-full md:rounded-r-full font-bold hover:bg-[#c09855] transition-colors w-full md:w-auto"
               >
                 Submit
               </button>
