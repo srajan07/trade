@@ -139,24 +139,14 @@
 // };
 
 // export default Hero;
-import React, { useState } from "react";
-import bgImage from "../assets/bg.jpeg";
-import TradingSurvey from "./TradingSurvey";
+
 
 const Hero = () => {
-  const [showSurvey, setShowSurvey] = useState(false);
-  const [email, setEmail] = useState("");
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const [emailEntered, setEmailEntered] = useState(false);
-  const [hideText, setHideText] = useState(false);
-
-  const handleYesClick = () => {
-    setShowSurvey(true);
-    setHideText(true);
-  };
+  const [email, setEmail] = useState(""); // Email input state
+  const [emailSubmitted, setEmailSubmitted] = useState(false); // Track email submission status
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    setEmail(e.target.value); // Update email value
   };
 
   const handleSubmitEmail = async (e) => {
@@ -164,18 +154,19 @@ const Hero = () => {
 
     if (email) {
       try {
-        const response = await fetch("https://trade-app-backend-69ex.onrender.com/api/users/email", {
-          method: "POST",
+        // Send email to the backend API
+        const response = await fetch('https://trade-app-backend-69ex.onrender.com/api/users/email', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email }), // Send email as JSON
         });
 
         const data = await response.json();
 
         if (response.ok) {
-          setEmailEntered(true);
+          // Successfully saved the email
           setEmailSubmitted(true);
         } else {
           alert(data.message || "Error occurred while submitting the email");
@@ -191,82 +182,60 @@ const Hero = () => {
 
   return (
     <div
-      className="min-h-screen bg-black text-white relative p-4"
+      className="min-h-screen bg-black text-white relative p-4 font-lexend"
       style={{
-        backgroundImage: `url(${bgImage})`,
+        backgroundImage: `url(../assets/bg.jpeg)`,
         backgroundSize: "cover",
         backgroundPosition: "center bottom",
       }}
     >
       <div className="container mx-auto px-4 pt-16 md:pt-20 lg:pt-24">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-left space-y-6">
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight">
-              Are you an Option Buyer?
-            </h1>
-            <p className="text-base md:text-lg">We are one among you!</p>
-            <p className="text-xl md:text-2xl bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] bg-clip-text text-transparent font-semibold">
-              We’ve got a surprise for you!
-            </p>
+        <div className="max-w-3xl mx-auto text-center space-y-6">
+          {/* Hero Title */}
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight text-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-transparent bg-clip-text">
+            Are you an Option Buyer?
+          </h1>
 
-            {!hideText && !emailEntered && !emailSubmitted && (
+          {/* Description Text */}
+          <p className="text-base md:text-lg">We are one among you!</p>
+
+          {/* Surprise Text with Gradient */}
+          <p className="text-xl md:text-2xl bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] bg-clip-text text-transparent font-semibold">
+            We’ve got a surprise for you!
+          </p>
+
+          {!emailSubmitted ? (
+            <>
               <p className="text-sm font-medium text-gray-400">
-                Submit the survey and the gift is yours.
-                <br />
-                We bet you didn’t see this coming.
+                Sign up now to stay updated and receive your surprise!
               </p>
-            )}
-
-            {!showSurvey ? (
-              <>
-                {!emailEntered && !emailSubmitted && (
+              <form className="flex flex-col gap-4 pt-6 items-center" onSubmit={handleSubmitEmail}>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    className="px-4 py-3 rounded-l-full text-white font-bold w-48 md:w-60 bg-black border-2 border-[#E0B865] placeholder-gray-400 text-sm focus:outline-none"
+                  />
                   <button
-                    onClick={handleYesClick}
-                    className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-8 py-3 rounded-full font-bold text-sm md:text-base shadow-md hover:shadow-lg transition-shadow"
+                    type="submit"
+                    className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-4 py-3 rounded-r-full font-bold text-sm hover:shadow-md transition-shadow"
                   >
-                    Yes, take me there!
+                    Submit
                   </button>
-                )}
-
-                {!emailSubmitted && !emailEntered && (
-                  <form className="flex flex-col gap-4 pt-10" onSubmit={handleSubmitEmail}>
-                    <p className="text-xs md:text-sm font-medium text-gray-400">
-                      Nah, I’ll just sign-up for now..
-                    </p>
-                    <div className="flex items-center">
-                      <input
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={handleEmailChange}
-                        className="px-4 py-2 rounded-l-full text-white bg-black border-2 border-[#E0B865] placeholder-gray-400 w-44 md:w-64 focus:outline-none"
-                      />
-                      <button
-                        type="submit"
-                        className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-4 py-2 rounded-r-full font-bold text-xs md:text-sm hover:opacity-90 transition-opacity"
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {emailSubmitted && (
-                  <div className="mt-6 text-lg font-semibold text-[#E0B865]">
-                    Thank you. We’ll keep you updated :)
-                  </div>
-                )}
-              </>
-            ) : (
-              <TradingSurvey />
-            )}
-          </div>
+                </div>
+              </form>
+            </>
+          ) : (
+            <div className="mt-6 text-lg font-bold text-[#E0B865]">
+              Thank you! We’ll keep you updated :)
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default Hero;
-
-
+export default Hero
