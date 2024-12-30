@@ -1,4 +1,16 @@
 /* Hero.css */
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
 .hero { /* Example to make font work */
     font-family: 'Lexend', sans-serif; /* Use font-family */
 }
+.journey-text {
+    font-family: 'Questrial', sans-serif;
+  }
+  .questrial-text {
+    font-family: 'Questrial', sans-serif;
+  }
+  body {
+    font-family: 'Questrial', sans-serif;
+  }
+    

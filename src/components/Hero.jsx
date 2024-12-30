@@ -140,91 +140,90 @@
 
 // export default Hero;
 
-import React, { useState } from 'react';
-import './Hero.css'; // Make sure to create this CSS file
+// new one
+import React, { useState } from "react";
+import "./Hero.css";
+import bgImage from "../assets/bg.jpeg";
 
 const Hero = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const [submissionError, setSubmissionError] = useState(null); // To handle errors
+  const [submissionError, setSubmissionError] = useState(null);
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  const handleEmailChange = (e) => setEmail(e.target.value);
 
   const handleSubmitEmail = async (e) => {
     e.preventDefault();
-    setSubmissionError(null); // Clear previous errors
+    setSubmissionError(null);
 
     if (!email) {
-      setSubmissionError('Please enter an email.');
+      setSubmissionError("Please enter an email.");
       return;
     }
 
     try {
-      const response = await fetch('https://trade-app-backend-69ex.onrender.com/api/users/email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch("https://trade-app-backend-69ex.onrender.com/api/users/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        setSubmissionError(errorData.message || 'Error submitting email.');
+        setSubmissionError(errorData.message || "Error submitting email.");
         return;
       }
 
       setEmailSubmitted(true);
-      setEmail(''); // Clear the input field after successful submission
-
+      setEmail("");
     } catch (error) {
-      setSubmissionError('Failed to submit email. Please try again.');
+      setSubmissionError("Failed to submit email. Please try again.");
       console.error(error);
     }
   };
 
   return (
     <div
-      className="hero min-h-screen bg-black text-white relative p-4 font-lexend"
-      style={{
-        backgroundImage: `url(../assets/bg.jpeg)`, // Make sure this path is correct
-        backgroundSize: 'cover',
-        backgroundPosition: 'center bottom',
-      }}
+      className="hero min-h-screen bg-cover bg-no-repeat bg-center text-white relative p-4 font-lexend"
+      style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="container mx-auto px-4 pt-16 md:pt-20 lg:pt-24">
-        <div className="max-w-3xl mx-auto text-left space-y-6">
-          <h1 className="text-3xl md:text-4xl font-bold leading-tight">Are you an Option Buyer?</h1>
-          <p className="text-base md:text-lg">We are one among you!</p>
-          <p className="text-xl md:text-2xl font-semibold text-[#E0B865]">
-            We’re building something BIG & UNIQUE <br />
-            JUST FOR YOU!
-          </p>
-          <p className="text-sm">Join us in the journey!</p>
+      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-12 px-6">
+        <div className="text-left space-y-0 max-w-lg mx-auto md:mx-0">
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-1">Are you an Option Buyer?</h1>
+          <p className="text-base md:text-xl">We are one among you!</p>
 
-          {submissionError && <div className="text-red-500 text-sm">{submissionError}</div>} {/* Display error message */}
+          <p className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] bg-clip-text text-transparent pt-10">
+  We’re building something BIG & UNIQUE
+  {emailSubmitted ? "" : " JUST FOR YOU!"}
+      </p>
+
+
+<p className="text-sm pt-12 pb-2 journey-text">Join us in the journey! 📈</p>
+
+
+          {submissionError && <div className="text-red-500 text-sm">{submissionError}</div>}
 
           {!emailSubmitted ? (
-            <form className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full" onSubmit={handleSubmitEmail}>
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={handleEmailChange}
-                className="px-4 py-2 rounded-full md:rounded-l-full bg-black border border-[#E0B865] text-white focus:outline-none w-full md:w-auto"
-              />
-              <button
-                type="submit"
-                className="bg-[#E0B865] text-black px-4 py-2 rounded-full md:rounded-r-full font-bold hover:bg-[#c09855] transition-colors w-full md:w-auto"
-              >
-                Submit
-              </button>
+            <form className="w-full max-w-md mx-auto md:mx-0" onSubmit={handleSubmitEmail}>
+              <div className="flex items-center max-w-[240px] border border-[#E0B865] rounded-full overflow-hidden">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  className="flex-grow px-3 py-2 text-xs text-white bg-black border-none focus:outline-none max-w-[180px]" // Adjust input width
+                />
+                <button
+                  type="submit"
+                  className="bg-gradient-to-r from-[#E0B865] via-[#FBF3E3] to-[#E0B865] text-black px-4 py-2 text-xs font-bold transition-shadow shadow-md hover:shadow-lg whitespace-nowrap flex-shrink-0"
+                >
+                  Submit
+                </button>
+              </div>
             </form>
           ) : (
-            <div className="mt-6 text-lg font-bold text-[#E0B865]">
-              Thank you! We’ll keep you updated :)
+            <div className="mt-6 text-lg font-bold text-[#E0B865] text-center md:text-left">
+              You’re an INSIDER now! We’ll keep you posted! 🫡
             </div>
           )}
         </div>
