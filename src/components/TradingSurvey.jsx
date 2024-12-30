@@ -256,7 +256,7 @@ const handleOptionSelect = (option) => {
               <span className="text-[#E0B865] ml-1 text-xl">*</span> // Added asterisk for mandatory questions
             )}
           </p>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col ">
                      {surveyQuestions[currentQuestionIndex].type === "single" &&
                             surveyQuestions[currentQuestionIndex].options.map((option, index) => (
                                 <label key={index} className="flex items-center gap-2">
